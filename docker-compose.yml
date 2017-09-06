@@ -1,0 +1,18 @@
+version: '2'
+services:
+  publisher:
+    build:
+      context: . 
+    image: zmq-pub
+    ports:
+      - "5556:5556"
+    tty: true
+    command: "/publisher.py"
+  subscriber:
+    build:
+      context: . 
+    image: zmq-sub
+    links:
+      - publisher:pub
+    tty: true
+    command: "/listener.py -c tcp://pub:5556 -q PICKLE"
